@@ -1,0 +1,63 @@
+---
+title: 'C&S 311'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+# For this assignment I consult with Hao Shen.
+# I made the explain and parts of looping by myself. However,I got lost and trouble when I try to figure out the logic of looping. I learned the logic from my classmates.
+
+```
+
+
+
+## Research on the logic
+
+```{r}
+n = 100
+m = c(50, 60, 70, 80, 90)
+p = seq(0.4, 1, 0.01)
+
+for (i in m) {
+  if (i == m[1]) {
+    Total = data.frame(p, effective=as.character(i),result=cumsum(dbinom(i,n,p)))
+  }
+  else {
+     Total = rbind( Total, data.frame(p, effective=as.character(i), result=cumsum(dbinom(i,n,p))))
+  }
+}
+
+
+ggplot()+
+  geom_rect(aes(xmin = 0.6, xmax = 0.8, ymin = 0.05, ymax = 0.95))+
+  geom_line(aes(p, result, color = effective), Total)
+
+
+
+```
+With total 100 sample size, the larger m will move the curve to further right.  5% type 1 error is shown by the bottom line and (1-95%) type 2 error is represented by top line .we need to find the line with smallest m cross the bottom of the box and the line with largest m cross with the top of the box. 
+
+## Redo and explain
+
+```{r}
+n = 100
+m = c(69,73)
+p = seq(0.4, 1, 0.01)
+for (i in m) {
+  if (i == m[1]) {
+    Total = data.frame(p, effective=as.character(i),result=cumsum(dbinom(i,n,p)))
+  }
+  else {
+     Total = rbind( Total, data.frame(p, effective=as.character(i), result=cumsum(dbinom(i,n,p))))
+  }
+  
+}
+ggplot()+
+  geom_rect(aes(xmin = 0.6, xmax = 0.8, ymin = 0.05, ymax = 0.95))+
+  geom_line(aes(p, result, color = effective),  Total)
+  
+```
+
+ Finding the line (red) with smallest m=69 cross the bottom of the box and the line(blue) with largest m=73 across with the top of the box. Therefor m between 69 and 73 is reliable.
